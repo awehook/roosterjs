@@ -5,6 +5,8 @@ import UndoSnapshots from './UndoSnapshots';
 import UndoSnapshotsService from '../interfaces/UndoSnapshotsService';
 import { PluginEvent, PluginEventType } from 'roosterjs-editor-types';
 
+const log = require('debug')('rooster:undo');
+
 const KEY_BACKSPACE = 8;
 const KEY_DELETE = 46;
 const KEY_SPACE = 32;
@@ -43,6 +45,7 @@ export default class Undo implements UndoService {
      * @param editor Editor instance
      */
     public initialize(editor: Editor): void {
+        log('initialize');
         this.editor = editor;
     }
 
@@ -50,6 +53,7 @@ export default class Undo implements UndoService {
      * Dispose this plugin
      */
     public dispose() {
+        log('dispose');
         this.editor = null;
 
         if (!this.preserveSnapshots) {
@@ -62,7 +66,10 @@ export default class Undo implements UndoService {
      * @param event PluginEvent object
      */
     public onPluginEvent(event: PluginEvent): void {
-        // if editor is in IME, don't do anything
+        // if editor is in IME, don't do
+        // log('onPluginEvent',this.editor);
+        if(!this.editor)
+        return;
         if (this.editor.isInIME()) {
             return;
         }
